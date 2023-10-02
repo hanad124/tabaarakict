@@ -21,7 +21,7 @@ const Form = () => {
                 type="text"
                 id="name"
                 name="name"
-                className="w-full px-4 py-2 border  text-custom_secondary border-gray-300 rounded-md focus:outline-none text-sm focus:ring-2 focus:ring-blue-400"
+                className="w-full px-4 py-2 border  text-custom_secondary border-gray-300 rounded-md focus:outline-none text-sm focus:ring-2 focus:ring-primary"
                 placeholder="Full name"
                 required
               />
@@ -37,7 +37,7 @@ const Form = () => {
                 type="email"
                 id="email"
                 name="email"
-                className="w-full px-4 py-2  text-sm text-custom_secondary border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="w-full px-4 py-2  text-sm text-custom_secondary border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                 placeholder="Email address"
                 required
               />
@@ -55,7 +55,7 @@ const Form = () => {
               type="text"
               id="subject"
               name="subject"
-              className="w-full px-4 py-2 border  text-sm text-custom_secondary border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full px-4 py-2 border  text-sm text-custom_secondary border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
               placeholder="Subject"
               required
             />
@@ -72,7 +72,7 @@ const Form = () => {
               id="company"
               name="company"
               className="w-full px-4 py-2 border  text-sm text-custom_secondary 
-              border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+              border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
               placeholder="Company"
             />
           </div>
@@ -88,7 +88,7 @@ const Form = () => {
               name="message"
               rows={4}
               placeholder="Write your message here"
-              className="w-full px-4 py-2 border  text-sm text-custom_secondary border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full px-4 py-2 border  text-sm text-custom_secondary border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
               required
             ></textarea>
           </div>

@@ -1,13 +1,11 @@
 /** @type {import('next').NextConfig} */
+const path = require("path");
 const nextConfig = {
   images: {
-    domains: [
-      "drive.google.com",
-      "dropbox.com",
-      "previews.dropbox.com",
-      "localhost",
-      "www.amazon.com",
-    ],
+    domains: ["drive.google.com", "localhost", "www.amazon.com"],
+  },
+  sassOptions: {
+    includePaths: [path.join(__dirname, "styles")],
   },
 };
 
