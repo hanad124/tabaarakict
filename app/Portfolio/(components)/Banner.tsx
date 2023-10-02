@@ -2,8 +2,8 @@ import { Button } from "@/components/ui/button";
 
 const Banner = () => {
   return (
-    <div className="mx-3 md:mx-0 py-16 overflow-x-hidden">
-      <div className="my-24 py-12 rounded-md container md:mx-auto px-6  md:px-16 bg-custom_primary lg:w-4/6 relative">
+    <div className="mx-3 md:mx-0 py-16 overflow-x-hidden overflow-y-hidden">
+      <div className="my-18 py-12 rounded-md container md:mx-auto px-6  md:px-16 bg-custom_primary lg:w-4/6 relative">
         <div className="flex flex-col gap-16 mg:gap-0 md:flex-row items-center justify-between ">
           <div
             className="absolute -top-36 -left-56 hidden md:block z-0"
