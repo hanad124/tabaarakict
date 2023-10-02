@@ -30,6 +30,13 @@ const Form = () => {
     setLoading(false);
     const json = await res.json();
     if (json.status === "success") {
+      setData({
+        name: "",
+        email: "",
+        subject: "",
+        company: "",
+        message: "",
+      });
       setLoading(false);
     } else if (json.status === "fail") {
       setLoading(false);

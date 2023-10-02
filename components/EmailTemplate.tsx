@@ -18,7 +18,7 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
   message,
 }) => (
   <div
-    className="bg-blue-400 text-slate-700 email-template"
+    className=""
     style={{
       backgroundColor: "#0b63e5",
       color: "white",
