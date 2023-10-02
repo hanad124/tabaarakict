@@ -283,7 +283,7 @@ const HostingPackages = () => {
                               </svg>
                             </div>
                             {feature === "SSL Certificate (NO)" ? (
-                              <p className="text-custom_textColor text-md line-through">
+                              <p className="text-slate-400 text-md line-through">
                                 SSL Certificate (NO)
                               </p>
                             ) : (
