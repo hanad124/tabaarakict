@@ -189,5 +189,10 @@
   background-image: url("../public/assets/breadcrumb-background.png");
 }
 
-/* Blogs */
-
+/* email-template */
+.email-template {
+  background-color: #e6e8ec;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  color: rgb(19, 9, 59);
+}
