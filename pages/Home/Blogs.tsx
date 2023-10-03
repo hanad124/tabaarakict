@@ -1,65 +1,89 @@
-// import axios from "axios";
-// import Image from "next/image";
+import axios from "axios";
+import Image from "next/image";
+import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
 
-// // const getPosts = async () => {
-// //   const response = await axios.get(
-// //     "http://127.0.0.1:1337/api/posts?populate=*"
-// //   );
+const getPosts = async () => {
+  const response = await axios.get(
+    "http://127.0.0.1:1337/api/posts?populate=*"
+  );
 
-// //   const data = response.data;
-// //   return data;
-// // };
+  const data = response.data;
+  return data;
+};
 
-const Blogs = () => {
-  //   // const posts = await getPosts();
+const Blogs = async () => {
+  const posts = await getPosts();
 
   return (
-    <></>
-    //     <>
-    //       <div className="container">
-    //         <div className="row">
-    //           <div className="col-md-12">
-    //             <h1>Blogs</h1>
-    //           </div>
-    //         </div>
-    //         {/* <div className="row">
-    //           {posts.data.map((post: any) => {
-    //             return (
-    //               <div className="col-md-4">
-    //                 <div className="card mb-4 shadow-sm">
-    //                   {post.attributes.thumbnail.data.map((image: any) => {
-    //                     return (
-    //                       <Image
-    //                         src={`http://127.0.0.1:1337${image.attributes.url}`}
-    //                         className="card-img-top"
-    //                         width={300}
-    //                         height={300}
-    //                         alt="..."
-    //                       />
-    //                     );
-    //                   })}
-    //                   <div className="card-body">
-    //                     <h5 className="card-title">{post.title}</h5>
-    //                     <p className="card-text">{post.description}</p>
-    //                     <div className="d-flex justify-content-between align-items-center">
-    //                       <div className="btn-group">
-    //                         <a
-    //                           href={`/blogs/${post.slug}`}
-    //                           className="btn btn-sm btn-outline-secondary"
-    //                         >
-    //                           View
-    //                         </a>
-    //                       </div>
-    //                       <small className="text-muted">{post.author}</small>
-    //                     </div>
-    //                   </div>
-    //                 </div>
-    //               </div>
-    //             );
-    //           })}
-    //         </div> */}
-    //       </div>
-    //     </>
+    <>
+      <div className="container">
+        <h2 className="mt-5 text-custom_secondary text-3xl font-bold leading-normal lg:leading-relaxed lg:text-5xl md:text-4xl md:mx-24 text-center lg:mx-36 mb-0">
+          Latest blog & news{" "}
+        </h2>
+        <p className="text-custom_textColor my-3 leading-relaxed text-center mx-3 lg:mx-80 md:mx-36">
+          Stay updated with the latest trends, insights, and news in the world
+          of ICT Through our informative blog and news articles. Explore our
+          recent posts below:{" "}
+        </p>
+        <div className="flex flex-col justify-start gap-3 md:flex-row md:flex-wrap mt-16">
+          {posts.data.map((post: any) => {
+            return (
+              <div
+                className="flex flex-col border border-custom_border md:w-[370px] rounded-lg px-5 py-5"
+                key={post.attributes.title}
+              >
+                {post.attributes.thumbnail.data.map((image: any) => {
+                  return (
+                    <Image
+                      src={`http://127.0.0.1:1337${image.attributes.url}`}
+                      className="w-full flex-1 rounded-md"
+                      width={300}
+                      height={300}
+                      alt="..."
+                    />
+                  );
+                })}
+                <div className=" text-sm font-medium mt-2 inline-block flex-1 cursor-pointer">
+                  <Link href={`/blog/tag/${post.attributes.category}`}>
+                    <Badge
+                      variant="outline"
+                      className="text-custom_primary bg-custom_primary/5 ring-none hover:ring-[1px] hover:ring-custom_primary"
+                    >
+                      #{post.attributes.category}
+                    </Badge>
+                  </Link>
+                </div>
+
+                <Link href={`/blog/posts/${post.attributes.slug}`}>
+                  <p className="mt-3 text-custom_secondary font-semibold cursor-pointer hover:text-custom_primary/80 h-10 flex-1 ">
+                    {post.attributes.title.slice(0, 60) +
+                      (post.attributes.title.length > 60 ? " ..." : "")}
+                  </p>
+                </Link>
+                <div className="flex gap-3 items-center mt-4">
+                  {post.attributes.author_image.data.map((image: any) => {
+                    return (
+                      <Image
+                        src={`http://127.0.0.1:1337${image.attributes.url}`}
+                        className="w-11 h-11 cursor-pointer rounded-full"
+                        width={300}
+                        height={300}
+                        alt="..."
+                      />
+                    );
+                  })}
+                  <div className="text-custom_textColor text-sm">
+                    <p>{post.attributes.author}</p>
+                    <p>{post.attributes.date}</p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </>
   );
 };
 

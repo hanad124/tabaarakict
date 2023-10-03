@@ -57,6 +57,10 @@
     "tags": {
       "type": "json",
       "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title"
     }
   }
 }
