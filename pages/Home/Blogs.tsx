@@ -2,6 +2,7 @@ import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { IPost, IThumbnail, IAvator } from "@/types/postType";
 
 const getPosts = async () => {
   const response = await axios.get(
@@ -27,24 +28,25 @@ const Blogs = async () => {
           recent posts below:{" "}
         </p>
         <div className="flex flex-col justify-start gap-3 md:flex-row md:flex-wrap mt-16">
-          {posts.data.map((post: any) => {
+          {posts.data.slice(0, 3).map((post: IPost) => {
             return (
               <div
                 className="flex flex-col border border-custom_border md:w-[370px] rounded-lg px-5 py-5"
-                key={post.attributes.title}
+                key={post.attributes.slug}
               >
-                {post.attributes.thumbnail.data.map((image: any) => {
+                {post.attributes.thumbnail.data.map((thumbnail: IThumbnail) => {
                   return (
                     <Image
-                      src={`http://127.0.0.1:1337${image.attributes.url}`}
+                      src={`http://127.0.0.1:1337${thumbnail.attributes.url}`}
                       className="w-full flex-1 rounded-md"
                       width={300}
                       height={300}
                       alt="..."
+                      key={thumbnail.id}
                     />
                   );
                 })}
-                <div className=" text-sm font-medium mt-2 inline-block flex-1 cursor-pointer">
+                <div className="text-sm font-medium mt-2 inline-block flex-1 cursor-pointer">
                   <Link href={`/blog/tag/${post.attributes.category}`}>
                     <Badge
                       variant="outline"
@@ -56,20 +58,21 @@ const Blogs = async () => {
                 </div>
 
                 <Link href={`/blog/posts/${post.attributes.slug}`}>
-                  <p className="mt-3 text-custom_secondary font-semibold cursor-pointer hover:text-custom_primary/80 h-10 flex-1 ">
+                  <p className="mt-3 text-custom_secondary font-semibold cursor-pointer hover:text-custom_primary/80 h-10 flex-1">
                     {post.attributes.title.slice(0, 60) +
                       (post.attributes.title.length > 60 ? " ..." : "")}
                   </p>
                 </Link>
                 <div className="flex gap-3 items-center mt-4">
-                  {post.attributes.author_image.data.map((image: any) => {
+                  {post.attributes.author_image.data.map((avator: IAvator) => {
                     return (
                       <Image
-                        src={`http://127.0.0.1:1337${image.attributes.url}`}
+                        src={`http://127.0.0.1:1337${avator.attributes.url}`}
                         className="w-11 h-11 cursor-pointer rounded-full"
                         width={300}
                         height={300}
                         alt="..."
+                        key={avator.id}
                       />
                     );
                   })}
