@@ -8,13 +8,25 @@ import { useEffect, useState } from "react";
 import { PostMetadata } from "@/types/PostMetadata";
 import Link from "next/link";
 import { BiSearch } from "react-icons/bi";
+import { IPost, IThumbnail, IAvator } from "@/types/postType";
+import axios from "axios";
 import { Button } from "@/components/ui/button";
 
 interface ComponentProps {
   posts: PostMetadata[];
 }
 
-const SinglePost: React.FC<ComponentProps> = ({ posts }) => {
+// get posts from strapi
+const getPosts = async () => {
+  const response = await axios.get(
+    "http://127.0.0.1:1337/api/posts?populate=*"
+  );
+
+  const data = response.data;
+  return data;
+};
+
+const SinglePost: React.FC<ComponentProps> = async ({ posts }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [showPosts, setShowPosts] = useState(4);
@@ -33,10 +45,14 @@ const SinglePost: React.FC<ComponentProps> = ({ posts }) => {
     setSearchTerm(event.target.value);
   };
 
-  const filteredPosts = posts
+  const exectpost = await getPosts();
+
+  const post: IPost[] = exectpost.data;
+
+  const filteredPosts = post
     .slice(1, showPosts)
     .filter((post) =>
-      post.title.toLowerCase().includes(searchTerm.toLowerCase())
+      post.attributes.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
   return (
@@ -69,19 +85,33 @@ const SinglePost: React.FC<ComponentProps> = ({ posts }) => {
               return (
                 <div
                   className="flex flex-col border border-custom_border md:w-[370px] rounded-lg px-5 py-5"
-                  key={post.title}
+                  key={post.attributes.title}
                 >
-                  {isLoading ? (
+                  {post.attributes.thumbnail.data.map(
+                    (thumbnail: IThumbnail) => {
+                      return (
+                        <Image
+                          src={`http://127.0.0.1:1337${thumbnail.attributes.url}`}
+                          className="w-full flex-1 rounded-md"
+                          width={300}
+                          height={300}
+                          alt="..."
+                          key={thumbnail.id}
+                        />
+                      );
+                    }
+                  )}
+                  {/* {isLoading ? (
                     <Skeleton height={200} />
                   ) : (
                     <Image
                       className="w-full flex-1 rounded-md"
-                      src={post.image}
-                      alt={post.title + " image"}
+                      src={post.attributes.image}
+                      alt={post.attributes.title + " image"}
                       width={500}
                       height={300}
                     />
-                  )}
+                  )} */}
                   {isLoading ? (
                     <Skeleton
                       height={20}
@@ -90,12 +120,12 @@ const SinglePost: React.FC<ComponentProps> = ({ posts }) => {
                     />
                   ) : (
                     <div className=" text-sm font-medium mt-2 inline-block flex-1 cursor-pointer">
-                      <Link href={`/blog/tag/${post.category}`}>
+                      <Link href={`/blog/tag/${post.attributes.category}`}>
                         <Badge
                           variant="outline"
                           className="text-custom_primary bg-custom_primary/5 ring-none hover:ring-[1px] hover:ring-custom_primary"
                         >
-                          #{post.category}
+                          #{post.attributes.category}
                         </Badge>
                       </Link>
                     </div>
@@ -108,17 +138,32 @@ const SinglePost: React.FC<ComponentProps> = ({ posts }) => {
                       style={{ marginTop: "8px" }}
                     />
                   ) : (
-                    <Link href={`/blog/posts/${post.slug}`}>
+                    <Link href={`/blog/posts/${post.attributes.slug}`}>
                       <p className="mt-3 text-custom_secondary font-semibold cursor-pointer hover:text-custom_primary/80 h-10 flex-1 ">
-                        {post.title.slice(0, 60) +
-                          (post.title.length > 60 ? " ..." : "")}
+                        {post.attributes.title.slice(0, 60) +
+                          (post.attributes.title.length > 60 ? " ..." : "")}
                       </p>
                     </Link>
                   )}
                   <div className="flex gap-3 items-center mt-4">
-                    {isLoading ? (
+                    {post.attributes.author_image.data.map(
+                      (avator: IAvator) => {
+                        return (
+                          <Image
+                            src={`http://127.0.0.1:1337${avator.attributes.url}`}
+                            className="w-11 h-11 cursor-pointer rounded-full"
+                            width={300}
+                            height={300}
+                            alt="..."
+                            key={avator.id}
+                          />
+                        );
+                      }
+                    )}
+                    {/* {isLoading ? (
                       <Skeleton circle height={44} width={44} />
                     ) : (
+                      
                       <Image
                         className="w-11 h-11 cursor-pointer"
                         src={post.avator}
@@ -126,7 +171,7 @@ const SinglePost: React.FC<ComponentProps> = ({ posts }) => {
                         width={100}
                         height={100}
                       />
-                    )}
+                    )} */}
                     <div className="text-custom_textColor text-sm">
                       {isLoading ? (
                         <Skeleton
@@ -140,7 +185,7 @@ const SinglePost: React.FC<ComponentProps> = ({ posts }) => {
                       {isLoading ? (
                         <Skeleton height={16} width={80} />
                       ) : (
-                        <p>{post.date}</p>
+                        <p>{post.attributes.date}</p>
                       )}
                     </div>
                   </div>

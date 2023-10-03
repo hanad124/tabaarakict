@@ -10,30 +10,40 @@ import ScrollIndicator from "@/components/ScrollIndicator";
 import { FiTag } from "react-icons/fi";
 import { Badge } from "@/components/ui/badge";
 import { Code } from "bright";
+import { IPost, IThumbnail, IAvator } from "@/types/postType";
+import axios from "axios";
 
 Code.theme = "dracula";
 
-const getPostContent = (slug: string) => {
-  const folder = "posts/";
-  const file = folder + slug + ".md";
-  const content = fs.readFileSync(file, "utf-8");
-  const matterResult = matter(content);
-  return matterResult;
+export async function getStaticPaths() {
+  const response = await axios.get("http://127.0.0.1:1337/api/posts");
+  const paths = response.data.data.map((post: IPost) => {
+    return { params: { slug: post.attributes.slug } };
+  });
+
+  return {
+    paths,
+    fallback: false,
+  };
+}
+
+// get post data from strapi
+const getPosts = async (slug: string) => {
+  const response = await axios.get(
+    `http://127.0.0.1:1337/api/posts/${slug}?populate=*`
+  );
+
+  const data = response.data;
+  return data.data;
 };
 
-export const generateStaticParams = async () => {
-  const posts = getPostMetadata();
-  return posts.map((post) => ({
-    slug: post.slug,
-    params: { slug: post.slug },
-  }));
-};
-
-const BlogPost = (props: any) => {
-  console.log("props:", props);
+const BlogPost = async (props: any) => {
+  // console.log("props:", props);
   const slug = props.params.slug;
-  const post = getPostContent(slug);
-  const image = post.data.image;
+  const post = await getPosts(slug);
+  const content = post.attributes.content;
+  const tags = post.attributes.tags.tags;
+  const image = post.attributes.thumbnail.data[0].attributes.url;
 
   // Wrap the code component in a function
   const renderCode = (props: any) => {
@@ -45,16 +55,16 @@ const BlogPost = (props: any) => {
       <ScrollIndicator />
       <div>
         <PostsBreadCrumb
-          author={post.data.author}
-          title={post.data.title}
-          date={post.data.date}
-          category={post.data.category}
+          author={post.attributes.author}
+          title={post.attributes.title}
+          date={post.attributes.date}
+          category={post.attributes.category}
         />
       </div>
       <div className="mx-auto px-4  md:px-10 py-16  flex flex-col md:flex-row justify-center gap-x-10 gap-y-10 ">
         <div className="max-[450px]:w-[22rem] m-auto break-words sm:mx-4 border-b pb-5 md:pd-0 md:border-b-0">
           <Image
-            src={image}
+            src={`http://127.0.0.1:1337${image}`}
             alt={slug}
             width={400}
             height={300}
@@ -68,7 +78,7 @@ const BlogPost = (props: any) => {
                 },
               }}
             >
-              {post.content}
+              {content}
             </Markdown>
           </article>
           {/* tags */}
@@ -80,7 +90,7 @@ const BlogPost = (props: any) => {
               <FiTag className="text-custom_secondary text-xl -mb-1 rotate-90" />
             </div>
             <div className="flex flex-wrap gap-3">
-              {post.data.tags.map((tag: string) => (
+              {tags.map((tag: string) => (
                 <Link href={`/blog/tag/${tag}`} key={tag}>
                   <Badge className="py-2 text-sm font-normal"> {tag}</Badge>
                 </Link>

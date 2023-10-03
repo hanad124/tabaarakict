@@ -44,7 +44,7 @@ const Form = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center md:flex-row mt-16">
+    <div className="flex flex-col justify-center md:flex-row mt-16" id="contactForm">
       {/* Contact Info */}
       <ContactInfo />
       <div className="md:w-1/2 p-7">
