@@ -6,21 +6,46 @@ import Image from "next/image";
 import { BiSearch } from "react-icons/bi";
 import { SearchDialog } from "./SearchPosts";
 import { CalendarIcon } from "@radix-ui/react-icons";
+import axios from "axios";
+import { IPost, IThumbnail, IAvator } from "@/types/postType";
 
 type ComponentProps = {
   placeholder: string;
 };
 
+// get recnt posts from strapi
+const getPosts = async () => {
+  const response = await axios.get(
+    "http://127.0.0.1:1337/api/posts?populate=*"
+  );
+
+  const data = response.data;
+  return data;
+};
+
 // get recent posts by date
-const posts = getPostMetadata();
-const recentPosts = posts
-  .slice(0, 4)
-  .sort((a, b) => b.creationDate.getTime() - a.creationDate.getTime());
+// const posts = getPostMetadata();
+// const recentPosts = posts
+//   .slice(0, 4)
+//   .sort((a, b) => b.creationDate.getTime() - a.creationDate.getTime());
 
 // get popular tags
-const tags = posts;
 
-const SideBar = ({ placeholder }: ComponentProps) => {
+const SideBar = async ({ placeholder }: ComponentProps) => {
+  const exectpost = await getPosts();
+  const posts: IPost[] = exectpost.data;
+  const tags = posts;
+
+  // get recent posts by date
+  const recentPosts = posts
+    .sort((a, b) => {
+      return (
+        new Date(b.attributes.date).valueOf() -
+        new Date(a.attributes.date).valueOf()
+      );
+    })
+    .slice(0, 4);
+
   return (
     <div className="md:w-[440px] sticky top-16 border border-custom_primary/10 rounded-lg h-full md:py-10 md:px-7 ">
       <SearchDialog posts={posts} placeholder={placeholder} />
@@ -37,27 +62,32 @@ const SideBar = ({ placeholder }: ComponentProps) => {
           {recentPosts.map((post) => {
             return (
               <Link
-                href={`/blog/posts/${post.slug}`}
-                key={post.title}
+                href={`/blog/posts/${post.attributes.slug}`}
+                key={post.attributes.title}
                 className=""
               >
                 <div className="flex items-center gap-4 ">
-                  <Image
-                    src={post.image}
-                    alt={post.slug}
-                    width={100}
-                    height={100}
-                    className="w-13 h-24 rounded cursor-pointer"
-                  />
+                  {post.attributes.thumbnail.data.map(
+                    (thumbnail: IThumbnail) => (
+                      <Image
+                        src={`http://127.0.0.1:1337${thumbnail.attributes.url}`}
+                        alt={post.attributes.title}
+                        width={100}
+                        height={100}
+                        className="w-13 h-24 rounded cursor-pointer"
+                      />
+                    )
+                  )}
+
                   <div className="text-custom_textColor flex flex-col justify-between gap-2  text-sm">
                     <p className="text-custom_secondary font-semibold text-base cursor-pointer hover:text-custom_primary/80  flex-1 ">
-                      {post.title.slice(0, 43) +
-                        (post.title.length > 43 ? " ..." : "")}
+                      {post.attributes.title.slice(0, 43) +
+                        (post.attributes.title.length > 43 ? " ..." : "")}
                     </p>
                     <div className="flex gap-2 items-center mt-1">
                       <CalendarIcon className="w-4 h-4 text-custom_primary" />
                       <p className="text-custom_secondary font-regular cursor-pointer hover:text-custom_primary/80 flex-1 text-sm">
-                        {post.date}
+                        {post.attributes.date}
                       </p>
                     </div>
                   </div>
@@ -77,13 +107,16 @@ const SideBar = ({ placeholder }: ComponentProps) => {
         </p>
         <div className="flex items-center  flex-wrap gap-3 mt-5">
           {tags.slice(0, 5).map((tag) => (
-            <Link href={`/blog/tag/${tag.category}`} key={tag.category}>
+            <Link
+              href={`/blog/tag/${tag.attributes.category}`}
+              key={tag.attributes.category}
+            >
               <Badge
                 variant="outline"
                 className="text-custom_primary bg-custom_primary/10 py-2 ring-none  cursor-pointer hover:bg-custom_primary hover:text-background"
-                key={tag.category}
+                key={tag.attributes.category}
               >
-                {tag.category}
+                {tag.attributes.category}
               </Badge>
             </Link>
           ))}

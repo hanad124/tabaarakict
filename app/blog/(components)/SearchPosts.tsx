@@ -16,9 +16,11 @@ import { PostMetadata } from "@/types/PostMetadata";
 import { BiSearch } from "react-icons/bi";
 import Link from "next/link";
 import { TJobs } from "@/types/jobsMetaData";
+import { IPost, IThumbnail, IAvator } from "@/types/postType";
+
 
 interface ComponentProps {
-  posts: PostMetadata[];
+  posts: IPost[];
   placeholder: string;
 }
 
@@ -65,10 +67,10 @@ export const SearchDialog: React.FC<ComponentProps> = ({ posts, placeholder }) =
           <CommandGroup heading="Suggestions">
             {posts.map((post) => {
               return (
-                <Link href={`/blog/posts/${post.slug}`} key={post.title}>
+                <Link href={`/blog/posts/${post.attributes.slug}`} key={post.attributes.title}>
                   <CommandItem className="cursor-pointer">
                     {/* <RocketIcon className="mr-2 h-4 w-4" /> */}
-                    <span>{post.title}</span>
+                    <span>{post.attributes.title}</span>
                     {/* <CommandShortcut>⌘J</CommandShortcut> */}
                   </CommandItem>
                   <CommandSeparator />
