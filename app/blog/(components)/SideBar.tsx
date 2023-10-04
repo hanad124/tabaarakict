@@ -6,7 +6,6 @@ import Image from "next/image";
 import { BiSearch } from "react-icons/bi";
 import { SearchDialog } from "./SearchPosts";
 import { CalendarIcon } from "@radix-ui/react-icons";
-import { type } from "os";
 
 type ComponentProps = {
   placeholder: string;

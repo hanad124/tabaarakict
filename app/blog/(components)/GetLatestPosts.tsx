@@ -12,7 +12,7 @@ const GetLatestPosts = () => {
     .sort((a, b) => b.creationDate.getTime() - a.creationDate.getTime())
     .slice(0);
 
-  return <SinglePost posts={sortedPosts} />;
+  return <SinglePost />;
 };
 
 export default GetLatestPosts;

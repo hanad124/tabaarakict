@@ -12,10 +12,6 @@ import { IPost, IThumbnail, IAvator } from "@/types/postType";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 
-interface ComponentProps {
-  posts: PostMetadata[];
-}
-
 // get posts from strapi
 const getPosts = async () => {
   const response = await axios.get(
@@ -26,7 +22,7 @@ const getPosts = async () => {
   return data;
 };
 
-const SinglePost: React.FC<ComponentProps> = async ({ posts }) => {
+const SinglePost = async () => {
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [showPosts, setShowPosts] = useState(4);
@@ -48,6 +44,14 @@ const SinglePost: React.FC<ComponentProps> = async ({ posts }) => {
   const exectpost = await getPosts();
 
   const post: IPost[] = exectpost.data;
+
+  // sort posts by date
+  post.sort((a, b) => {
+    return (
+      new Date(b.attributes.date).valueOf() -
+      new Date(a.attributes.date).valueOf()
+    );
+  });
 
   const filteredPosts = post
     .slice(1, showPosts)
