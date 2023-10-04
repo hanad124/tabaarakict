@@ -1,6 +1,18 @@
 import * as React from "react";
 import logo from "../public/assets/tabaarak-logo.svg";
 import Image from "next/image";
+import Markdown from "markdown-to-jsx";
+
+import {
+  Html,
+  Body,
+  Tailwind,
+  Heading,
+  Head,
+  Text,
+  Button,
+  Img,
+} from "@react-email/components";
 
 interface EmailTemplateProps {
   name: string;
@@ -17,62 +29,22 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
   company,
   message,
 }) => (
-  <div
-    className=""
-    style={{
-      backgroundColor: "#0b63e5",
-      color: "white",
-      padding: "2rem",
-      margin: "1rem",
-      borderRadius: "0.5rem",
-    }}
-  >
-    {/* <Image
-      src={logo}
-      alt="Tabaarak Logo"
-      width={100}
-      height={100}
-      style={{ width: "100px", height: "auto", marginBottom: "2rem" }}
-    /> */}
-    <h1>{name}!</h1>
-    <p style={{ color: "white", fontSize: "15" }}>
-      <span
-        style={{
-          backgroundColor: "white",
-          color: "#0b63e5",
-          padding: ".3rem .6rem",
-          borderRadius: ".5rem",
-        }}
-      >
-        {email}
-      </span>
-    </p>
-    <p style={{ fontSize: "15" }}>
-      <span
-        style={{
-          backgroundColor: "white",
-          color: "#0b63e5",
-          padding: ".3rem .6rem",
-          borderRadius: ".5rem",
-        }}
-      >
-        {subject}
-      </span>
-    </p>
-    <p style={{ fontSize: "15" }}>
-      <span
-        style={{
-          backgroundColor: "white",
-          color: "#0b63e5",
-          padding: ".3rem .6rem",
-          borderRadius: ".5rem",
-        }}
-      >
-        {company}
-      </span>
-    </p>
-    <p style={{ lineHeight: "24px", fontSize: "16px", fontWeight: "300" }}>
-      {message}
-    </p>
-  </div>
+  <Html>
+    <Head />
+    <Tailwind>
+      <Body>
+        <div className=" p-8 m-4 rounded-md">
+          <article className="mt-16 prose md:prose-lg dark:prose-invert prose-img:w-full  prose-img:rounded prose-headings:text-custom_secondary prose-img:mx-auto md:prose-img:h-[22rem] prose-a:text-blue-400 ">
+            <Heading className="">{name}!</Heading>
+            <Text className="mr-4">{email}</Text>
+            <Text className="mr-4">{subject}</Text>
+            <Text>{company}</Text>
+            <div className="leading-relaxed text-xl mt-10 text-custom_secondary">
+              <Markdown>{message}</Markdown>
+            </div>
+          </article>
+        </div>
+      </Body>
+    </Tailwind>
+  </Html>
 );
