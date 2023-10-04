@@ -88,30 +88,24 @@ const SinglePost: React.FC<ComponentProps> = async ({ posts }) => {
                   key={post.attributes.title}
                 >
                   {post.attributes.thumbnail.data.map(
-                    (thumbnail: IThumbnail) => {
-                      return (
-                        <Image
-                          src={`http://127.0.0.1:1337${thumbnail.attributes.url}`}
-                          className="w-full flex-1 rounded-md"
-                          width={300}
-                          height={300}
-                          alt="..."
-                          key={thumbnail.id}
-                        />
-                      );
-                    }
+                    (thumbnail: IThumbnail) => (
+                      <>
+                        {isLoading ? (
+                          <Skeleton height={200} />
+                        ) : (
+                          <Image
+                            src={`http://127.0.0.1:1337${thumbnail.attributes.url}`}
+                            className="w-full flex-1 rounded-md"
+                            width={300}
+                            height={300}
+                            alt="..."
+                            key={thumbnail.id}
+                          />
+                        )}
+                      </>
+                    )
                   )}
-                  {/* {isLoading ? (
-                    <Skeleton height={200} />
-                  ) : (
-                    <Image
-                      className="w-full flex-1 rounded-md"
-                      src={post.attributes.image}
-                      alt={post.attributes.title + " image"}
-                      width={500}
-                      height={300}
-                    />
-                  )} */}
+
                   {isLoading ? (
                     <Skeleton
                       height={20}
