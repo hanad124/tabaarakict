@@ -43,10 +43,13 @@ function Header() {
   return (
     <div>
       <nav
-        className={`fixed top-0 left-0  z-20 py-2" w-full backdrop-blur-3xl border-b-2 border-custom_border bg-background/95 ${
+        className={`fixed top-0 left-0  z-20 py-2" w-full  border-b-[1px] border-custom_border  ${
           isVisible ? "bg-background/80" : "bg-background"
         } "
         }`}
+        style={{
+          backdropFilter: "saturate(180%) blur(20px)",
+        }}
       >
         <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-7}`}>
           <div className="flex items-center justify-between h-16">
