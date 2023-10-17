@@ -1,6 +1,7 @@
 import Header from "@/components/Header";
 import "./globals.css";
 import GoTopButton from "@/components/GoTopButton";
+import { Toaster } from "@/components/ui/toaster";
 
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -26,6 +27,7 @@ export default function RootLayout({
         <LoadingProgress />
         <Header />
         {children}
+        <Toaster />
         <Footer />
         <GoTopButton />
       </body>

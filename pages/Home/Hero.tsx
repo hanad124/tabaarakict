@@ -105,7 +105,7 @@ const Hero = () => {
 
       {/*Domain Search section  */}
       <div className="domain-search-section -mt-[2rem] relative z-10">
-        <div className="flex justify-between px-4 border-2 mx-auto md:w-4/6 lg:w-3/6 focus-within:ring-[3px] focus-within:ring-[#0b62e571] rounded-full w-5/6  border-custom_primary bg-white py-2">
+        <div className="flex justify-between px-4 border-2 mx-auto md:w-4/6 lg:w-4/6 focus-within:ring-[3px] focus-within:ring-[#0b62e571] rounded-full w-5/6  border-custom_primary bg-white py-2">
           <div className="flex w-full items-center">
             <p className="border-r-2 border-[#DDD] text-[#323F7C] pr-2 hidden md:block">
               www.
