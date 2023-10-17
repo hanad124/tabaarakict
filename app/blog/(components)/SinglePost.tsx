@@ -38,6 +38,7 @@ const SinglePost = async () => {
 
   //  search posts by title
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
     setSearchTerm(event.target.value);
   };
 
