@@ -92,7 +92,7 @@ function Header() {
 
             <Button
               size={"default"}
-              className="hidden md:block text-white bg-[#0B63E5] px-4 py-2 rounded-md hover:bg-[#0b62e5db]"
+              className="hidden md:flex text-white bg-[#0B63E5] px-4 py-4 md:justify-center md:items-center rounded-md hover:bg-[#0b62e5db]"
             >
               <Link href="/contact">Contact us</Link>
             </Button>

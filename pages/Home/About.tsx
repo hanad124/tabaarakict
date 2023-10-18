@@ -17,7 +17,7 @@ const About = () => {
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        className="mt-32 mb-24 px-10 md:flex gap-10 lg:gap-20 items-center justify-center md:w-full md:justify-center"
+        className="mt-36 mb-24 px-10 md:flex gap-10 lg:gap-20 items-center justify-center md:w-full md:justify-center"
       >
         <div className="flex-2">
           <motion.div
