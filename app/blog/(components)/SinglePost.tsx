@@ -24,23 +24,36 @@ const getPosts = async () => {
 
 const SinglePost = async () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
   const [showPosts, setShowPosts] = useState(4);
+  const [filteredPosts, setFilteredPosts] = useState<IPost[]>([]);
 
   // Simulate loading delay
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 2000);
+    const fetchData = async () => {
+      const response = await axios.get(
+        `http://127.0.0.1:1337/api/posts?populate=*`
+      );
+      const data = response.data;
+
+      // sort posts by date
+      data.data.sort((a: IPost, b: IPost) => {
+        return (
+          new Date(b.attributes.date).valueOf() -
+          new Date(a.attributes.date).valueOf()
+        );
+      });
+
+      const filterPosts = data.data.slice(1, showPosts);
+      setFilteredPosts(filterPosts);
+    };
+
+    fetchData();
 
     return () => clearTimeout(timer);
-  }, []);
-
-  //  search posts by title
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault();
-    setSearchTerm(event.target.value);
-  };
+  }, [showPosts]);
 
   const exectpost = await getPosts();
 
@@ -54,11 +67,19 @@ const SinglePost = async () => {
     );
   });
 
-  const filteredPosts = post
-    .slice(1, showPosts)
-    .filter((post) =>
-      post.attributes.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      const inputElement = event.target as HTMLInputElement;
+      const filteredPosts = post
+        .slice(1, showPosts)
+        .filter((post) =>
+          post.attributes.title
+            .toLowerCase()
+            .includes(inputElement.value.toLowerCase())
+        );
+      setFilteredPosts(filteredPosts);
+    }
+  };
 
   return (
     <>
@@ -73,15 +94,14 @@ const SinglePost = async () => {
             <input
               type="text"
               className="w-full text-custom_secondary focus:outline-none"
-              placeholder="search posts"
-              value={searchTerm}
-              onChange={handleSearch}
+              placeholder="Search posts"
+              onKeyDown={(event) => handleKeyDown(event)}
             />
           </div>
         </div>
         <div className="flex flex-col justify-start gap-3 md:flex-row md:flex-wrap mt-16">
           {/* {blogPosts} */}
-          {filteredPosts.length === 0 ? (
+          {filteredPosts?.length === 0 ? (
             <p className="text-custom_secondary font-semibold mx-auto ">
               No posts found.
             </p>
@@ -145,32 +165,24 @@ const SinglePost = async () => {
                     </Link>
                   )}
                   <div className="flex gap-3 items-center mt-4">
-                    {post.attributes.author_image.data.map(
-                      (avator: IAvator) => {
-                        return (
-                          <Image
-                            src={`http://127.0.0.1:1337${avator.attributes.url}`}
-                            className="w-11 h-11 cursor-pointer rounded-full"
-                            width={300}
-                            height={300}
-                            alt="..."
-                            key={avator.id}
-                          />
-                        );
-                      }
-                    )}
-                    {/* {isLoading ? (
+                    {isLoading ? (
                       <Skeleton circle height={44} width={44} />
                     ) : (
-                      
-                      <Image
-                        className="w-11 h-11 cursor-pointer"
-                        src={post.avator}
-                        alt={"post image"}
-                        width={100}
-                        height={100}
-                      />
-                    )} */}
+                      post.attributes.author_image.data.map(
+                        (avator: IAvator) => {
+                          return (
+                            <Image
+                              src={`http://127.0.0.1:1337${avator.attributes.url}`}
+                              className="w-11 h-11 cursor-pointer rounded-full"
+                              width={300}
+                              height={300}
+                              alt="..."
+                              key={avator.id}
+                            />
+                          );
+                        }
+                      )
+                    )}
                     <div className="text-custom_textColor text-sm">
                       {isLoading ? (
                         <Skeleton
